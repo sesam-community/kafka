@@ -15,6 +15,7 @@ config = json.loads(os.environ["CONFIG"])
 
 consumer_timeout_ms = config.get("consumer_timeout_ms", 60000)
 
+
 @app.route('/', methods=["GET"])
 def get():
     if config.get("sasl_username"):
@@ -60,6 +61,8 @@ def get():
 
     limit = request.args.get("limit")
 
+    decode_json_value = config.get("decode_json_value", False)
+
     def generate():
         yield "["
         index = 0
@@ -73,7 +76,7 @@ def get():
                 "timestamp": entity.timestamp,
                 "offset": entity.offset,
                 "partition": entity.partition,
-                "value": entity.value,
+                "value": json.loads(entity.value.decode('utf-8')) if decode_json_value else entity.value,
                 "key": entity.key
             }
             if entity.key:
