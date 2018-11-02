@@ -48,7 +48,7 @@ def get():
             offset = offsets.get(partition)
             if offset:
                 logger.info("seeking to offset %s for partition %s" % (offset, partition))
-                consumer.seek(TopicPartition(topic, partition), offset)
+                consumer.seek(TopicPartition(topic, partition), offset + 1)
 
     elif config.get("seek_to_beginning", False):
         offsets = {}
@@ -57,6 +57,8 @@ def get():
     else:
         offsets = {}
         logger.info("no since, consuming from end")
+
+    limit = request.args.get("limit")
 
     def generate():
         yield "["
@@ -83,6 +85,8 @@ def get():
 
             yield entities_to_json(result)
             index = index + 1
+            if limit and index > int(limit):
+                break
         yield "]"
     return Response(generate(), mimetype='application/json', )
 
