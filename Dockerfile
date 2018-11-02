@@ -1,4 +1,4 @@
-FROM python:3-alpine
+FROM python:3.6-alpine
 MAINTAINER Baard H. Rehn Johansen "baard.johansen@sesam.io"
 
 COPY ./service /service
