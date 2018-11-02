@@ -15,33 +15,32 @@ config = json.loads(os.environ["CONFIG"])
 
 consumer_timeout_ms = config.get("consumer_timeout_ms", 60000)
 
-if config.get("sasl_username"):
-    import ssl
-    context = ssl.create_default_context()
-    consumer = KafkaConsumer(bootstrap_servers=config["bootstrap_servers"],
-                             consumer_timeout_ms=consumer_timeout_ms,
-                             enable_auto_commit=False,
-                             security_protocol="SASL_SSL",
-                             ssl_context=context,
-                             sasl_mechanism="PLAIN",
-                             sasl_plain_username=config["sasl_username"],
-                             sasl_plain_password=config["sasl_password"])
-else:
-    consumer = KafkaConsumer(bootstrap_servers=config["bootstrap_servers"],
-                             consumer_timeout_ms=consumer_timeout_ms,
-                             enable_auto_commit=False)
-
-topic = config["topic"]
-if config.get("partitions"):
-    partitions = config.get("partitions")
-else:
-    partitions = consumer.partitions_for_topic(topic)
-
-consumer.assign([TopicPartition(topic, partition) for partition in partitions])
-
-
 @app.route('/', methods=["GET"])
 def get():
+    if config.get("sasl_username"):
+        import ssl
+        context = ssl.create_default_context()
+        consumer = KafkaConsumer(bootstrap_servers=config["bootstrap_servers"],
+                                 consumer_timeout_ms=consumer_timeout_ms,
+                                 enable_auto_commit=False,
+                                 security_protocol="SASL_SSL",
+                                 ssl_context=context,
+                                 sasl_mechanism="PLAIN",
+                                 sasl_plain_username=config["sasl_username"],
+                                 sasl_plain_password=config["sasl_password"])
+    else:
+        consumer = KafkaConsumer(bootstrap_servers=config["bootstrap_servers"],
+                                 consumer_timeout_ms=consumer_timeout_ms,
+                                 enable_auto_commit=False)
+
+    topic = config["topic"]
+    if config.get("partitions"):
+        partitions = config.get("partitions")
+    else:
+        partitions = consumer.partitions_for_topic(topic)
+
+    consumer.assign([TopicPartition(topic, partition) for partition in partitions])
+
     since = request.args.get("since")
     if since:
         offsets = decode_since(partitions, since)
