@@ -9,7 +9,7 @@ from entity_json import entities_to_json
 app = Flask(__name__)
 
 logger = logging.getLogger('service')
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 config = json.loads(os.environ["CONFIG"])
 
