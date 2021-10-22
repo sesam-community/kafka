@@ -75,16 +75,13 @@ def get():
             # identify content type to determine how to transform into JSON
             content_type = next((v[1] for i, v in enumerate(entity.headers) if v[0] == 'Content-Type'), None).decode("utf-8")
 
-            entity_value = entity.value.decode("utf-8")
-            entity_value_as_json = to_json(entity=entity_value, content_type=content_type)
-
             result = {
                 "_updated": encode_since(partitions, offsets),
                 "timestamp": entity.timestamp,
                 "offset": entity.offset,
                 "partition": entity.partition,
-#                "value": json.loads(entity.value.decode('utf-8')) if decode_json_value else entity.value,
-                "value": entity_value_as_json,
+                "content-type": "application/json" if decode_json_value else content_type,
+                "value": json.loads(entity.value.decode('utf-8')) if decode_json_value else entity.value,
                 "key": entity.key
             }
             if entity.key:
@@ -102,16 +99,5 @@ def get():
     return Response(generate(), mimetype='application/json', )
 
 
-def to_json(entity, content_type):
-
-    if content_type == 'application/xml':
-        data_as_json = xmltodict.parse(entity)
-    else:
-        # assume JSON by default
-        data_as_json = entities_to_json(entity)
-
-    return data_as_json
-
-
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')
