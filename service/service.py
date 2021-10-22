@@ -5,7 +5,6 @@ import logging
 from kafka import KafkaConsumer, TopicPartition
 from since_codec import encode_since, decode_since
 from entity_json import entities_to_json
-import xmltodict
 
 app = Flask(__name__)
 
