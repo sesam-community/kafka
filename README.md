@@ -15,7 +15,7 @@ Kafka-python KafkaConsumer: https://kafka-python.readthedocs.io/en/master/apidoc
 
 `CONFIG.bootstrap_servers` - Comma separated string of Kafka bootstrap servers ("server1:port1,server2:port2,...")
 
-`CONFIG.consumer_timeout_ms` - number of milliseconds to block during message iteration before raising StopIteration (Default: 60000)
+`CONFIG.consumer_timeout_ms` - Number of milliseconds to block during message iteration before raising StopIteration (Default: 60000)
 
 `CONFIG.decode_json_value` - Set this to `true` if the `value` property returned from Kafka is JSON (Default: `false`)
 
@@ -29,9 +29,9 @@ For certificate authentication: Kafka uses port *9093* by default.
 
 ### For AUTH_METHOD = "credentials"
 
-`CONFIG.sasl_username` - Username to authenticate with the Kafka
+`CONFIG.sasl_username` - Username to authenticate with Kafka
 
-`CONFIG.sasl_password` - Password to authenticate with the Kafka
+`CONFIG.sasl_password` - Password to authenticate with Kafka
 
 ### For AUTH_METHOD = "certificate"
 
