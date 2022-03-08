@@ -58,7 +58,7 @@ def get(topic):
         logger.debug(cert)
         logger.debug(pkey)
 
-        # write certs to disk
+        # write certs to disk so that KafkaConsumer can read them
         ca.write()
         cert.write()
         pkey.write()

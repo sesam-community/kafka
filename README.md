@@ -19,7 +19,7 @@ Kafka-python KafkaConsumer: https://kafka-python.readthedocs.io/en/master/apidoc
 
 `CONFIG.decode_json_value` - Set this to `true` if the `value` property returned from Kafka is JSON (Default: `false`)
 
-`CONFIG.seek_to_beginning` - Set this to `false` to only read new records (Default: `true`) **WARNING!** See Limitations below.
+`CONFIG.seek_to_beginning` - Set this to `false` to only read new records (Default: `true`); ignored if pipe config `source.supports_since` is set to `true`.
 
 **Note!**
 
@@ -110,9 +110,3 @@ For certificate authentication: Kafka uses port *9093* by default.
   }
 }
 ```
-
-## Limitations
-
-Limited or no since support.
-
-Setting `seek_to_beginning` to `false` may result in loss of data. Use with caution.
